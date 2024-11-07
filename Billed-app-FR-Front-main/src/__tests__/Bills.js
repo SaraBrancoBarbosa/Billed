@@ -5,8 +5,11 @@
 import {screen, waitFor} from "@testing-library/dom"
 import BillsUI from "../views/BillsUI.js"
 import { bills } from "../fixtures/bills.js"
-import { ROUTES_PATH} from "../constants/routes.js";
-import {localStorageMock} from "../__mocks__/localStorage.js";
+import { ROUTES_PATH} from "../constants/routes.js"
+import {localStorageMock} from "../__mocks__/localStorage.js"
+
+import { formatDate, formatStatus } from "../app/format.js"
+import Logout from "./Logout.js"
 
 import router from "../app/Router.js";
 
