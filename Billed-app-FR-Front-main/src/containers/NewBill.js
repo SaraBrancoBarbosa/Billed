@@ -2,6 +2,7 @@ import { ROUTES_PATH } from '../constants/routes.js'
 import Logout from "./Logout.js"
 
 export default class NewBill {
+
   constructor({ document, onNavigate, store, localStorage }) {
     this.document = document
     this.onNavigate = onNavigate
@@ -15,9 +16,21 @@ export default class NewBill {
     this.billId = null
     new Logout({ document, localStorage, onNavigate })
   }
+
   handleChangeFile = e => {
     e.preventDefault()
     const file = this.document.querySelector(`input[data-testid="file"]`).files[0]
+
+    // To allow only the jpg, jpeg and png file extensions
+    const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i
+    // regex.exec(string)
+    if (!allowedExtensions.exec(file.name)) {
+      alert("Veuillez joindre un fichier avec une extension .jpg, .jpeg ou .png.")
+      // Then reset the value so the user can try again
+      this.document.querySelector(`input[data-testid="file"]`).value = ""
+      return
+    }
+
     const filePath = e.target.value.split(/\\/g)
     const fileName = filePath[filePath.length-1]
     const formData = new FormData()
@@ -33,6 +46,7 @@ export default class NewBill {
           noContentType: true
         }
       })
+
       .then(({fileUrl, key}) => {
         console.log(fileUrl)
         this.billId = key
@@ -40,9 +54,19 @@ export default class NewBill {
         this.fileName = fileName
       }).catch(error => console.error(error))
   }
+
   handleSubmit = e => {
     e.preventDefault()
-    console.log('e.target.querySelector(`input[data-testid="datepicker"]`).value', e.target.querySelector(`input[data-testid="datepicker"]`).value)
+
+    //console.log('e.target.querySelector(`input[data-testid="datepicker"]`).value', e.target.querySelector(`input[data-testid="datepicker"]`).value)
+    
+    // The user has to write a bill name before submitting
+    const expenseName = e.target.querySelector(`input[data-testid="expense-name"]`).value
+    if (!expenseName) {
+      alert("Veuillez donner un nom à votre dépense.")
+      return
+    }
+
     const email = JSON.parse(localStorage.getItem("user")).email
     const bill = {
       email,
@@ -57,6 +81,7 @@ export default class NewBill {
       fileName: this.fileName,
       status: 'pending'
     }
+
     this.updateBill(bill)
     this.onNavigate(ROUTES_PATH['Bills'])
   }
