@@ -20,6 +20,10 @@ const row = (bill) => {
   }
 
 const rows = (data) => {
+  // To order bills from earliest to latest
+  if (data){
+    data.sort((a, b) => new Date(b.date) - new Date(a.date))
+  }
   return (data && data.length) ? data.map(bill => row(bill)).join("") : ""
 }
 
