@@ -1,0 +1,53 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Back",
+            "type": "shell",
+            "command": "cd ./Billed-app-FR-Back-main;npm run run:dev",
+            "problemMatcher": [],
+            "presentation": {
+                "group": "Billed"
+            },
+            "runOptions": {
+                "runOn": "folderOpen"
+            },
+            "icon": {
+                "id": "symbol-method",
+                "color": "terminal.ansiMagenta"
+            },
+        },
+        {
+            "label": "Front",
+            "type": "shell",
+            "command": "cd ./Billed-app-FR-Front-main;live-server",
+            "problemMatcher": [],
+            "presentation": {
+                "group": "Billed"
+            },
+            "runOptions": {
+                "runOn": "folderOpen"
+            },
+            "icon": {
+                "id": "rocket",
+                "color": "terminal.ansiYellow"
+            },
+        },
+        {
+            "label": "Test",
+            "type": "shell",
+            "command": "cd ./Billed-app-FR-Front-main;npm run test",
+            "problemMatcher": [],
+            "presentation": {
+                "group": "Test"
+            },
+            "runOptions": {
+                "runOn": "folderOpen"
+            },
+            "icon": {
+                "id": "zap",
+                "color": "terminal.ansiGreen"
+            },
+        }
+    ]
+}

@@ -130,6 +130,7 @@ export default class {
     this.onNavigate(ROUTES_PATH['Dashboard'])
   }
 
+  /* Old code with the counter system which created conflicts with the opening state of the lists
   handleShowTickets(e, bills, index) {
     if (this.counter === undefined || this.index !== index) this.counter = 0
     if (this.index === undefined || this.index !== index) this.index = index
@@ -151,6 +152,39 @@ export default class {
 
     return bills
 
+  }
+*/
+
+// Instead of using a counter system, we create an array to stock the open state of each list
+  handleShowTickets(e, bills, index) {
+    // To initialise the array
+    if (!this.openList) {
+      this.openList = []
+    }
+
+    // To check if the index already exists in the array, otherwise initialise it to false
+    if (this.openList[index] === undefined) {
+      this.openList[index] = false
+    }
+    
+    // To alternate the open state of the list
+    this.openList[index] = !this.openList[index]
+    
+    if (this.openList[index]) {
+      $(`#arrow-icon${index}`).css({ transform: 'rotate(0deg)' })
+      $(`#status-bills-container${index}`)
+        .html(cards(filteredBills(bills, getStatus(index))))
+    } else {
+      $(`#arrow-icon${index}`).css({ transform: 'rotate(90deg)' })
+      $(`#status-bills-container${index}`)
+        .html("")
+    }
+    
+    bills.forEach(bill => {
+      $(`#open-bill${bill.id}`).click((e) => this.handleEditTicket(e, bill, bills))
+    })
+    
+    return bills
   }
 
   getBillsAllUsers = () => {
