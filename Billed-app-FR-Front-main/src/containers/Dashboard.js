@@ -86,6 +86,9 @@ export default class {
   }
 
   handleEditTicket(e, bill, bills) {
+    // This console.log allows to find the problem: the event "click" was accumulated
+    // console.log(bill)
+
     if (this.counter === undefined || this.id !== bill.id) this.counter = 0
     if (this.id === undefined || this.id !== bill.id) this.id = bill.id
     if (this.counter % 2 === 0) {
@@ -130,32 +133,7 @@ export default class {
     this.onNavigate(ROUTES_PATH['Dashboard'])
   }
 
-  /* Old code with the counter system which created conflicts with the opening state of the lists
-  handleShowTickets(e, bills, index) {
-    if (this.counter === undefined || this.index !== index) this.counter = 0
-    if (this.index === undefined || this.index !== index) this.index = index
-    if (this.counter % 2 === 0) {
-      $(`#arrow-icon${this.index}`).css({ transform: 'rotate(0deg)'})
-      $(`#status-bills-container${this.index}`)
-        .html(cards(filteredBills(bills, getStatus(this.index))))
-      this.counter ++
-    } else {
-      $(`#arrow-icon${this.index}`).css({ transform: 'rotate(90deg)'})
-      $(`#status-bills-container${this.index}`)
-        .html("")
-      this.counter ++
-    }
-
-    bills.forEach(bill => {
-      $(`#open-bill${bill.id}`).click((e) => this.handleEditTicket(e, bill, bills))
-    })
-
-    return bills
-
-  }
-*/
-
-// Instead of using a counter system, we create an array to stock the open state of each list
+  // Instead of using a counter system, we create an array to stock the open state of each list (for better readability)
   handleShowTickets(e, bills, index) {
     // To initialise the array
     if (!this.openList) {
@@ -170,14 +148,17 @@ export default class {
     // To alternate the open state of the list
     this.openList[index] = !this.openList[index]
     
-    if (this.openList[index]) {
-      $(`#arrow-icon${index}`).css({ transform: 'rotate(0deg)' })
-      $(`#status-bills-container${index}`)
-        .html(cards(filteredBills(bills, getStatus(index))))
-    } else {
-      $(`#arrow-icon${index}`).css({ transform: 'rotate(90deg)' })
-      $(`#status-bills-container${index}`)
-        .html("")
+    // Loop: i successively takes the keys of the array (string). Allows to manage the events
+    for (let i in this.openList) {
+      if (this.openList[i]) {
+        $(`#arrow-icon${i}`).css({ transform: 'rotate(0deg)' })
+        $(`#status-bills-container${i}`)
+          .html(cards(filteredBills(bills, getStatus(+i))))
+      } else {
+        $(`#arrow-icon${i}`).css({ transform: 'rotate(90deg)' })
+        $(`#status-bills-container${i}`)
+          .html("")
+      }
     }
     
     bills.forEach(bill => {
