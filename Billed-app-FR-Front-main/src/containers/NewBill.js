@@ -13,6 +13,7 @@ export default class NewBill {
     file.addEventListener("change", this.handleChangeFile)
     this.fileUrl = null
     this.fileName = null
+    this.fileForm = null
     this.billId = null
     new Logout({ document, localStorage, onNavigate })
   }
@@ -20,6 +21,8 @@ export default class NewBill {
   handleChangeFile = e => {
     e.preventDefault()
     const file = this.document.querySelector(`input[data-testid="file"]`).files[0]
+    // to define this.fileForm in the selecting file management function
+    this.fileForm = null
 
     // To allow only the jpg, jpeg and png file extensions
     const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i
@@ -32,27 +35,13 @@ export default class NewBill {
     }
 
     const filePath = e.target.value.split(/\\/g)
-    const fileName = filePath[filePath.length-1]
+    this.fileName = filePath[filePath.length-1]
     const formData = new FormData()
     const email = JSON.parse(localStorage.getItem("user")).email
     formData.append('file', file)
     formData.append('email', email)
-
-    this.store
-      .bills()
-      .create({
-        data: formData,
-        headers: {
-          noContentType: true
-        }
-      })
-
-      .then(({fileUrl, key}) => {
-        console.log(fileUrl)
-        this.billId = key
-        this.fileUrl = fileUrl
-        this.fileName = fileName
-      }).catch(error => console.error(error))
+    // Assign formData to this.fileForm: to use it when creating the ticket in the submit
+    this.fileForm = formData
   }
 
   handleSubmit = e => {
@@ -65,25 +54,45 @@ export default class NewBill {
     if (!expenseName) {
       alert("Veuillez donner un nom à votre dépense.")
       return
+      // To explicitly check that the user enters a file
+    } else if (!this.fileForm) {
+      alert("Veuillez télécharger un fichier.")
+      return
     }
 
     const email = JSON.parse(localStorage.getItem("user")).email
-    const bill = {
-      email,
-      type: e.target.querySelector(`select[data-testid="expense-type"]`).value,
-      name:  e.target.querySelector(`input[data-testid="expense-name"]`).value,
-      amount: parseInt(e.target.querySelector(`input[data-testid="amount"]`).value),
-      date:  e.target.querySelector(`input[data-testid="datepicker"]`).value,
-      vat: e.target.querySelector(`input[data-testid="vat"]`).value,
-      pct: parseInt(e.target.querySelector(`input[data-testid="pct"]`).value) || 20,
-      commentary: e.target.querySelector(`textarea[data-testid="commentary"]`).value,
-      fileUrl: this.fileUrl,
-      fileName: this.fileName,
-      status: 'pending'
-    }
 
-    this.updateBill(bill)
-    this.onNavigate(ROUTES_PATH['Bills'])
+    // The block is moved here to guarantee that the ticket is only created if all the elements are validated
+    // So this includes the entered file
+    this.store
+      .bills()
+      .create({
+        data: this.fileForm,
+        headers: {
+          noContentType: true
+        }
+      })
+
+      .then(({fileUrl, key}) => {
+        console.log(fileUrl)
+        this.billId = key
+        this.fileUrl = fileUrl
+        const bill = {
+          email,
+          type: e.target.querySelector(`select[data-testid="expense-type"]`).value,
+          name:  e.target.querySelector(`input[data-testid="expense-name"]`).value,
+          amount: parseInt(e.target.querySelector(`input[data-testid="amount"]`).value),
+          date:  e.target.querySelector(`input[data-testid="datepicker"]`).value,
+          vat: e.target.querySelector(`input[data-testid="vat"]`).value,
+          pct: parseInt(e.target.querySelector(`input[data-testid="pct"]`).value) || 20,
+          commentary: e.target.querySelector(`textarea[data-testid="commentary"]`).value,
+          fileUrl: this.fileUrl,
+          fileName: this.fileName,
+          status: 'pending'
+        }
+        this.updateBill(bill)
+        this.onNavigate(ROUTES_PATH['Bills'])
+      }).catch(error => console.error(error))
   }
 
   // not need to cover this function by tests
