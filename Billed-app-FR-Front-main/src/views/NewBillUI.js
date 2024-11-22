@@ -15,7 +15,7 @@ export default () => {
                 <div class="col-md-6">
                   <div class="col-half">
                     <label for="expense-type" class="bold-label">Type de dépense</label>
-                      <select required class="form-control blue-border" data-testid="expense-type">
+                      <select id="expense-type" required class="form-control blue-border" data-testid="expense-type">
                         <option>Transports</option>
                         <option>Restaurants et bars</option>
                         <option>Hôtel et logement</option>
@@ -27,35 +27,35 @@ export default () => {
                   </div>
                   <div class="col-half">
                     <label for="expense-name" class="bold-label">Nom de la dépense</label>
-                    <input type="text" class="form-control blue-border" data-testid="expense-name" placeholder="Vol Paris Londres" />
+                    <input id="expense-name" type="text" class="form-control blue-border" data-testid="expense-name" placeholder="Vol Paris Londres" />
                   </div>
                   <div class="col-half">
                     <label for="datepicker" class="bold-label">Date</label>
-                    <input required type="date" class="form-control blue-border" data-testid="datepicker" />
+                    <input id="datepicker" required type="date" class="form-control blue-border" data-testid="datepicker" />
                   </div>
                   <div class="col-half">
                     <label for="amount" class="bold-label">Montant TTC </label>
-                    <input required type="number" class="form-control blue-border input-icon input-icon-right" data-testid="amount" placeholder="348"/>
+                    <input id="amount" required type="number" class="form-control blue-border input-icon input-icon-right" data-testid="amount" placeholder="348"/>
                   </div>
                   <div class="col-half-row">
                     <div class="flex-col"> 
                       <label for="vat" class="bold-label">TVA</label>
-                      <input type="number" class="form-control blue-border" data-testid="vat" placeholder="70" />
+                      <input id="vat" type="number" class="form-control blue-border" data-testid="vat" placeholder="70" />
                     </div>
                     <div class="flex-col">
                       <label for="pct" class="white-text">%</label>
-                      <input required type="number" class="form-control blue-border" data-testid="pct" placeholder="20" />
+                      <input id="pct" required type="number" class="form-control blue-border" data-testid="pct" placeholder="20" />
                     </div>
                   </div>
                 </div>
                 <div class="col-md-6">
                   <div class="col-half">
                     <label for="commentary" class="bold-label">Commentaire</label>
-                    <textarea class="form-control blue-border" data-testid="commentary" rows="3"></textarea>
+                    <textarea id="commentary" class="form-control blue-border" data-testid="commentary" rows="3"></textarea>
                   </div>
                   <div class="col-half">
                     <label for="file" class="bold-label">Justificatif</label>
-                    <input required type="file" class="form-control blue-border" data-testid="file" />
+                    <input id="file" required type="file" class="form-control blue-border" data-testid="file" />
                   </div>
                 </div>
             </div>

@@ -3,6 +3,18 @@
   margin-top: 20px;
 }
 
+.bold-label{
+  display: inline-block;
+    margin-bottom: .5rem;
+  font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 16px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+
+}
+
 .input-field {
   background: #f9f9f9;
   border-radius: 5px;
