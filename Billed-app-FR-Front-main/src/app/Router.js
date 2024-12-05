@@ -26,17 +26,11 @@ export default () => {
       new Login({ document, localStorage, onNavigate, PREVIOUS_LOCATION, store })
     } else if (pathname === ROUTES_PATH['Bills']) {
       rootDiv.innerHTML = ROUTES({ pathname, loading: true })
-      const divIcon1 = document.getElementById('layout-icon1')
-      const divIcon2 = document.getElementById('layout-icon2')
-      divIcon1.classList.add('active-icon')
-      divIcon2.classList.remove('active-icon')
+      hightlightMenu(1)
       const bills = new Bills({ document, onNavigate, store, localStorage  })
       bills.getBills().then(data => {
         rootDiv.innerHTML = BillsUI({ data })
-        const divIcon1 = document.getElementById('layout-icon1')
-        const divIcon2 = document.getElementById('layout-icon2')
-        divIcon1.classList.add('active-icon')
-        divIcon2.classList.remove('active-icon')
+        hightlightMenu(1)
         new Bills({ document, onNavigate, store, localStorage })
       }).catch(error => {
         rootDiv.innerHTML = ROUTES({ pathname, error })
@@ -44,14 +38,11 @@ export default () => {
     } else if (pathname === ROUTES_PATH['NewBill']) {
       rootDiv.innerHTML = ROUTES({ pathname, loading: true })
       new NewBill({ document, onNavigate, store, localStorage })
-      const divIcon1 = document.getElementById('layout-icon1')
-      const divIcon2 = document.getElementById('layout-icon2')
-      divIcon1.classList.remove('active-icon')
-      divIcon2.classList.add('active-icon')
+      hightlightMenu(2)
     } else if (pathname === ROUTES_PATH['Dashboard']) {
       rootDiv.innerHTML = ROUTES({ pathname, loading: true })
-      const bills = new Dashboard({ document, onNavigate, store, bills: [], localStorage })
-      bills.getBillsAllUsers().then(bills => {
+      const dashboard = new Dashboard({ document, onNavigate, store, bills: [], localStorage })
+      dashboard.getBillsAllUsers().then(bills => {
           rootDiv.innerHTML = DashboardUI({data: {bills}})
           new Dashboard({document, onNavigate, store, bills, localStorage})
         }).catch(error => {
@@ -77,17 +68,11 @@ export default () => {
   } else if (window.location.hash !== "") {
     if (window.location.hash === ROUTES_PATH['Bills']) {
       rootDiv.innerHTML = ROUTES({ pathname: window.location.hash, loading: true })
-      const divIcon1 = document.getElementById('layout-icon1')
-      const divIcon2 = document.getElementById('layout-icon2')
-      divIcon1.classList.add('active-icon')
-      divIcon2.classList.remove('active-icon')
+      hightlightMenu(1)
       const bills = new Bills({ document, onNavigate, store, localStorage  })
       bills.getBills().then(data => {
         rootDiv.innerHTML = BillsUI({ data })
-        const divIcon1 = document.getElementById('layout-icon1')
-        const divIcon2 = document.getElementById('layout-icon2')
-        divIcon1.classList.add('active-icon')
-        divIcon2.classList.remove('active-icon')
+        hightlightMenu(1)
         new Bills({ document, onNavigate, store, localStorage })
       }).catch(error => {
         rootDiv.innerHTML = ROUTES({ pathname: window.location.hash, error })
@@ -95,14 +80,11 @@ export default () => {
     } else if (window.location.hash === ROUTES_PATH['NewBill']) {
       rootDiv.innerHTML = ROUTES({ pathname: window.location.hash, loading: true })
       new NewBill({ document, onNavigate, store, localStorage })
-      const divIcon1 = document.getElementById('layout-icon1')
-      const divIcon2 = document.getElementById('layout-icon2')
-      divIcon1.classList.remove('active-icon')
-      divIcon2.classList.add('active-icon')
+      hightlightMenu(2)
     } else if (window.location.hash === ROUTES_PATH['Dashboard']) {
       rootDiv.innerHTML = ROUTES({ pathname: window.location.hash, loading: true })
-      const bills = new Dashboard({ document, onNavigate, store, bills: [], localStorage })
-      bills.getBillsAllUsers().then(bills => {
+      const dashboard = new Dashboard({ document, onNavigate, store, bills: [], localStorage })
+      dashboard.getBillsAllUsers().then(bills => {
         rootDiv.innerHTML = DashboardUI({ data: { bills } })
         new Dashboard({ document, onNavigate, store, bills, localStorage })
       }).catch(error => {
@@ -114,3 +96,14 @@ export default () => {
   return null
 }
 
+const hightlightMenu = (id) => {
+  const divIcon1 = document.getElementById('layout-icon1')
+  const divIcon2 = document.getElementById('layout-icon2')
+  if (id===1) {
+    divIcon2.classList.remove('active-icon')
+    divIcon1.classList.add('active-icon')
+  } else {
+    divIcon1.classList.remove('active-icon')
+    divIcon2.classList.add('active-icon')
+  }
+}
