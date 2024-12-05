@@ -20,15 +20,23 @@ export default class NewBill {
 
   handleChangeFile = e => {
     e.preventDefault()
+
     const file = this.document.querySelector(`input[data-testid="file"]`).files[0]
     // to define this.fileForm in the selecting file management function
     this.fileForm = null
 
-    // To allow only the jpg, jpeg and png file extensions
+    // Regex to allow only the jpg, jpeg and png file formats
     const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i
-    // regex.exec(string)
+
+    // To reset the error display before checking
+    const errorElement = this.document.querySelector(`input[data-testid="file"]`).closest(".col-half").querySelector(".form-error")
+    errorElement.style.display = "none"
+
     if (!allowedExtensions.exec(file.name)) {
-      alert("Veuillez joindre un fichier avec une extension .jpg, .jpeg ou .png.")
+      errorElement.style.display = "flex"
+      // To reset the file name and file form
+      this.fileName = null
+      this.fileForm = null
       // Then reset the value so the user can try again
       this.document.querySelector(`input[data-testid="file"]`).value = ""
       return
@@ -49,17 +57,6 @@ export default class NewBill {
 
     //console.log('e.target.querySelector(`input[data-testid="datepicker"]`).value', e.target.querySelector(`input[data-testid="datepicker"]`).value)
     
-    // The user has to write a bill name before submitting
-    const expenseName = e.target.querySelector(`input[data-testid="expense-name"]`).value
-    if (!expenseName) {
-      alert("Veuillez donner un nom à votre dépense.")
-      return
-      // To explicitly check that the user enters a file
-    } else if (!this.fileForm) {
-      alert("Veuillez télécharger un fichier.")
-      return
-    }
-
     const email = JSON.parse(localStorage.getItem("user")).email
 
     // The block is moved here to guarantee that the ticket is only created if all the elements are validated
