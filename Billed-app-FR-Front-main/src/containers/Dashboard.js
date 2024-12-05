@@ -181,6 +181,7 @@ export default class {
           date: doc.date,
           status: doc.status
         }))
+        .sort((a, b) => new Date(a.date) - new Date(b.date))
         return bills
       })
       .catch(error => {
