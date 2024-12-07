@@ -2,12 +2,11 @@
  * @jest-environment jsdom
  */
 
-import '@testing-library/jest-dom'
-import { screen, fireEvent, waitFor } from "@testing-library/dom"
+import { screen, fireEvent } from "@testing-library/dom"
 import { ROUTES_PATH} from "../constants/routes.js"
 import { localStorageMock } from "../__mocks__/localStorage.js"
 import mockStore from "../__mocks__/store"
-import router from "../app/Router.js";
+import router from "../app/Router.js"
 import NewBill from "../containers/NewBill.js"
 
 // To use the mocked data for the API simulation
@@ -111,26 +110,9 @@ describe("Given I am connected as an employee", () => {
     test("Then the submission is a success when all the fields are filled and I'm send to the Bills page", async () => {
       const newBill = initNewBill()
 
-      // J'aimerais prendre un exemple du mockstore, le premier de la liste, sans avoir à l'écrire ici
-      //const bills = await mockStore.bills().list()
-      //const bill = bills[0]
-
-      const bill = {
-        id: "47qAXb6fIm2zOKkLzMro",
-        vat: "80",
-        fileUrl: "https://test.storage.tld/v0/b/billable-677b6.a…f-1.jpg?alt=media&token=c1640e12-a24b-4b11-ae52-529112e9602a",
-        status: "pending",
-        type: "Hôtel et logement",
-        commentary: "séminaire billed",
-        name: "encore",
-        fileName: "preview-facture-free-201801-pdf-1.jpg",
-        date: "2004-04-04",
-        amount: 400,
-        commentAdmin: "ok",
-        email: "a@a",
-        pct: 20
-      }
-
+      // To take the first mocked bill
+      const bill = (await mockStore.bills().list())[0]
+      
       // To check the fields
       const fieldType = screen.getByTestId("expense-type")
       fireEvent.change(fieldType, { target: { value: bill.type } })
@@ -168,7 +150,7 @@ describe("Given I am connected as an employee", () => {
       newBillForm.addEventListener("change", handleChangeFile)
       
       const fileField = screen.getByTestId("file")
-      // New File with an array containing an empty Blob (which represents the contents of the file)
+      // New File with an array containing an empty Blob (which represents the content of the file)
       fireEvent.change(fileField, 
         { target: { 
           files: [ 
